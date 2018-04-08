@@ -1,5 +1,7 @@
 var tmi = require('tmi.js');
 
+const opn = require('opn');
+
 var options = {
 	options: {
 		debug: true
@@ -63,6 +65,12 @@ function Timer() {
 	currentTime = Hours + ':' + tempHold + Mins + ':' + Seconds + " UpSeconds: ";
 }
 
+//Quotes         ---> Blank Quote: "\"\", ."
+var Quotes = ["\"Penis Digivolve\", Spartan 2015.", "\"Fuck with me you know I got it!\", Spartan 2015.", "\"SHOW ME THE NUDES!\", Spartan 2015.", "\"I'm so mean, I make medicine sick\", Spartan 2016.",
+"\"Y'all fucked me I'ma fuck y'all back even harder\", Spartan 2016.", "\"You went from retarted to even more retarded\", Spartan 2017.", "\"Shut the fuck up. Shut the fuck up right now.\", Spartan 2017.",
+ "Ranner: \"Crucible or finish the missions?\". Spartan: \"FINISH THE FUCKING MISSIONS\", 2017.", "\"Yeah Get Mad!\", Ranner 2017.", "\"Oof\", Ranner 2018."];
+
+
 //Logic --------------
 var client = new tmi.client(options);
 client.connect();
@@ -76,12 +84,22 @@ client.on("hosted", function (channel, user, viewers, autohost) {
 });
 
 //User Joined
+var numJoined = 0;
+
 client.on("join", function (channel, username, self) {
 
 	if (self) return;
 
+	numJoined++;
+
     client.action("ranner198", username +
     	" has joined chat.");
+
+    if (numJoined % 2 == 0)
+    {
+    	client.action("ranner198", " Hi, I'm RannerBot. I do things, just type !help to see my list of commands.");
+    }
+
 });
 
 //Commands
@@ -94,7 +112,7 @@ client.on("chat", function (channel, userstate, message, self) {
     //If Not Self
 
     if (holdMessage == "!help")
-    	client.action("ranner198", userstate['display-name'] + "Commands: !help, !twitter, !instagram, !rip, !small, !uptime, !epic, !pcinfo, !fortnite, !overlay");
+    	client.action("ranner198", userstate['display-name'] + " Commands: !help, !twitter, !instagram, !rip, !small, !uptime, !epic, !pcinfo, !fortnite, !overlay, !quote, !songrequest");
 
     if (holdMessage == "!twitter")
 		client.action("ranner198", "https://twitter.com/Ran_Crump");
@@ -136,6 +154,26 @@ client.on("chat", function (channel, userstate, message, self) {
 
     if (holdMessage.includes("shit") || holdMessage.includes("fuck") || holdMessage.includes("cock") || holdMessage.includes("dick") || holdMessage.includes("ass"))
     	client.action("ranner198", '@' + userstate['display-name]'] + " Watch yo' profanity.");
+
+    if (holdMessage == ("!quote")) {
+    	var rand = Quotes[Math.floor(Math.random() * Quotes.length)];;
+		client.action("ranner198", rand);
+	}
+
+		
+	if (holdMessage.includes("songrequest") && holdMessage.includes("youtube.com")) {
+
+		var songTitle = [];
+
+		var whereToStart = message.indexOf("https");
+
+		for (var i = whereToStart; i < message.length; i++) {
+			songTitle.push(message[i].toString());
+		}		
+		var stringName = songTitle.join('');
+		opn(stringName);
+		client.action("ranner198", stringName);
+	}
 });
 
 
@@ -154,3 +192,7 @@ function needHelp(channel)
   client.action("ranner198", "Enjoying the stream? Follow me on Twitter: " +
   " https://twitter.com/Ran_Crump" + " and Instagram: https://www.instagram.com/ran_crump");
 }
+
+
+//https://www.youtube.com/watch?v=fZQZJghFOk4
+//https://www.youtube.com/watch?v=fzqzjghfok4
