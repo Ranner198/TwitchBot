@@ -12,7 +12,6 @@ var options = {
 	},
 	identity: {
 		username: "rannerbot:",
-		password: "oauth:u0xmwn51xanm4yg6x1wyd8r24i56d2"
 	},
 	channels: ["ranner198"]
 };
