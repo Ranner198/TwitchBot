@@ -12,6 +12,7 @@ var options = {
 	},
 	identity: {
 		username: "rannerbot:",
+		password: "oauth:u0xmwn51xanm4yg6x1wyd8r24i56d2"
 	},
 	channels: ["ranner198"]
 };
@@ -140,7 +141,7 @@ client.on("chat", function (channel, userstate, message, self) {
     	client.action("ranner198", "Ranner has a 2016 ASUSTek, CPU: Intel i7-6700, GPU: NVIDA GeForce GTX 970, RAM: 16GB, Memory: 2TB, Network Speed: 130/15.");
 
     if (holdMessage == "!fortnite")
-    	client.action("ranner198", "Total Kills: 305, Win: 5%, K/D: 1.04, KPM: 0.2, Level: 32.");
+    	client.action("ranner198", "Total Kills: 525, Win: 3%, K/D: 1.20, KPM: 0.4, Level: 51.");
 
     if (holdMessage == "!overlay")
     	client.action("ranner198", " My Overlay is from: https://wdflat.com/product/fortnite-overlay/ they have some really great overlays go check them out!");
@@ -151,15 +152,14 @@ client.on("chat", function (channel, userstate, message, self) {
     if (holdMessage.includes("ranner198"))
     	client.action("ranner198", '@' + userstate['display-name'] + " New phone, who dis?");
 
-    if (holdMessage.includes("shit") || holdMessage.includes("fuck") || holdMessage.includes("cock") || holdMessage.includes("dick") || holdMessage.includes("ass"))
-    	client.action("ranner198", '@' + userstate['display-name]'] + " Watch yo' profanity.");
+    if (holdMessage.includes("shit") || holdMessage.includes("fuck") || holdMessage.includes("cock") || holdMessage.includes("dick") || holdMessage.includes("ass") || holdMessage.includes("mf"))
+    	client.action("ranner198", '@' + userstate['display-name'] + " Watch yo' profanity.");
 
     if (holdMessage == ("!quote")) {
-    	var rand = Quotes[Math.floor(Math.random() * Quotes.length)];;
+    	var rand = Quotes[Math.floor(Math.random() * Quotes.length)];
 		client.action("ranner198", rand);
 	}
-
-		
+	
 	if (holdMessage.includes("songrequest") && holdMessage.includes("youtube.com")) {
 
 		var songTitle = [];
@@ -177,21 +177,14 @@ client.on("chat", function (channel, userstate, message, self) {
 
 
 //Follow Me Loop
-setInterval(followMe, 240000);
 
-setInterval(needHelp, 200000);
+var tipsAndTricks = ["The RannerBot is now up and running in Alpha Stage, type !help for the list of avaliable commands", "Enjoying the stream? Follow me on Twitter: https://twitter.com/Ran_Crump and Instagram: https://www.instagram.com/ran_crump"]
+
+setInterval(followMe, 1200000);
 
 function followMe(channel)
 {
-  client.action("ranner198", "The RannerBot is now up and running in Alpha Stage, type !help for the list of avaliable commands");
+	var randomNum = tipsAndTricks[Math.floor(Math.random() * tipsAndTricks.length+1)];
+
+	client.action("ranner198", randomNum);
 }
-
-function needHelp(channel)
-{
-  client.action("ranner198", "Enjoying the stream? Follow me on Twitter: " +
-  " https://twitter.com/Ran_Crump" + " and Instagram: https://www.instagram.com/ran_crump");
-}
-
-
-//https://www.youtube.com/watch?v=fZQZJghFOk4
-//https://www.youtube.com/watch?v=fzqzjghfok4
