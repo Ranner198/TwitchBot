@@ -1,0 +1,39 @@
+{
+	"Commands": [{
+			"!help": "Commands: !help, !twitter, !instagram, !rip, !small, !uptime, !epic, !pcinfo, !fortnite, !overlay, !quote, !songrequest, !discord, !epic, !hug"
+		},
+		{
+			"!twitter": "https://twitter.com/Ran_Crump"
+		},
+		{
+			"!instagram": "https://www.instagram.com/ran_crump"
+		}, 
+		{
+			"!pcinfo": "Ranner has a 2016 ASUSTek, CPU: Intel i7-6700, GPU: NVIDA GeForce GTX 970, RAM: 16GB, Memory: 2TB, Network Speed: 130/15."
+		}, 
+		{"quote": [
+		  "\"Penis Digivolve\", Spartan 2015.", 
+		  "\"Fuck with me you know I got it!\", Spartan 2015.",
+		  "\"SHOW ME THE NUDES!\", Spartan 2015.",
+		  "\"I'm so mean, I make medicine sick\", Spartan 2016.",
+		  "\"Y'all fucked me I'ma fuck y'all back even harder\", Spartan 2016.",
+		  "\"You went from retarted to even more retarded\", Spartan 2017.",
+		  "\"Shut the fuck up. Shut the fuck up right now.\", Spartan 2017.",
+ 		  "Ranner: \"Crucible or finish the missions?\". Spartan: \"FINISH THE FUCKING MISSIONS\", 2017.",
+ 		  "\"Yeah Get Mad!\", Ranner 2017.",
+ 		  "\"Oof\", Ranner 2018."
+		]}, 
+		{
+			"!discord": "https://discord.gg/6ST5fEn" 
+		}, 
+		{
+			"!epic": "Ranner's Epic name is: Ranner198"
+		}, 
+		{
+			"!small": "~n is small!"
+		},
+		{
+			"!uptime": "~n  the Ranner stream has been running for: ~t"
+		}
+	]
+}

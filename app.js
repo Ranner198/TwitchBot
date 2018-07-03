@@ -1,6 +1,14 @@
-var tmi = require('tmi.js');
-
+//Core Depencies
+const tmi = require('tmi.js');
 const opn = require('opn');
+
+//JSON List
+const json = require('./TwitchBotJson');
+var string = JSON.stringify(json);
+var obj = JSON.parse(string);
+
+//For Fortnite API
+const request = require('ajax-request');
 
 var options = {
 	options: {
@@ -17,7 +25,7 @@ var options = {
 	channels: ["ranner198"]
 };
 
-//Timer --------------
+//Timer ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 var UpSeconds = 50;
 
 var currentTime = 0;
@@ -62,20 +70,28 @@ function Timer() {
 		Mins = 0;
 	}
 
-	currentTime = Hours + ':' + tempHold + Mins + ':' + Seconds + " UpSeconds: ";
+	currentTime = Hours + ':' + tempHold + Mins + ':' + Seconds;
 }
 
-//Quotes         ---> Blank Quote: "\"\", ."
-var Quotes = ["\"Penis Digivolve\", Spartan 2015.", "\"Fuck with me you know I got it!\", Spartan 2015.", "\"SHOW ME THE NUDES!\", Spartan 2015.", "\"I'm so mean, I make medicine sick\", Spartan 2016.",
-"\"Y'all fucked me I'ma fuck y'all back even harder\", Spartan 2016.", "\"You went from retarted to even more retarded\", Spartan 2017.", "\"Shut the fuck up. Shut the fuck up right now.\", Spartan 2017.",
- "Ranner: \"Crucible or finish the missions?\". Spartan: \"FINISH THE FUCKING MISSIONS\", 2017.", "\"Yeah Get Mad!\", Ranner 2017.", "\"Oof\", Ranner 2018."];
-
-
-//Logic --------------
+//Logic ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 var client = new tmi.client(options);
 client.connect();
 
-client.color("#33F9FF");
+var colorArray = ["Blue", "BlueViolet", "CadetBlue", "Chocolate", "Coral", "DodgerBlue", "Firebrick", "GoldenRod", "Green", "HotPink", "OrangeRed", "Red", "SeaGreen", "SpringGreen", "YellowGreen"];
+
+var colorIndex = colorArray.length;
+
+var currentColor = 0;
+
+function randomColor() {
+	currentColor = Math.floor(Math.random() * colorIndex);
+}
+
+client.color(colorArray[currentColor]).then(function(data) {
+    return 
+}).catch(function(err) {
+    console.log(err);
+});
 
 //Hosted
 client.on("hosted", function (channel, user, viewers, autohost) {
@@ -83,7 +99,7 @@ client.on("hosted", function (channel, user, viewers, autohost) {
     	" thank you for the host! Current viewers = " + viewers);
 });
 
-//User Joined
+//User Joined ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 var numJoined = 0;
 
 client.on("join", function (channel, username, self) {
@@ -91,60 +107,104 @@ client.on("join", function (channel, username, self) {
 	if (self) return;
 
 	numJoined++;
-
-    client.action("ranner198", username +
-    	" has joined chat.");
-
-    if (numJoined % 2 == 0)
+	if(username != "ranner198") {
+		client.action("ranner198", "Hello " + username + " has joined chat, say hi HeyGuys");
+	}
+    if (numJoined % 3 == 0)
     {
     	client.action("ranner198", " Hi, I'm RannerBot. I do things, just type !help to see my list of commands.");
     }
 
 });
 
-//Commands
+
+
+
+
+
+
+	//Commands JSON------------------------------------------------------------------------------------------------------------------------------------------------------------
 client.on("chat", function (channel, userstate, message, self) {
     
 	var holdMessage = message.toLowerCase();
 
     if (self) return;
 
-    //If Not Self
+	//Command Messages
+    if (holdMessage[0] == "!") {
 
-    if (holdMessage == "!help")
-    	client.action("ranner198", userstate['display-name'] + " Commands: !help, !twitter, !instagram, !rip, !small, !uptime, !epic, !pcinfo, !fortnite, !overlay, !quote, !songrequest");
+    	var Action = "null";
 
-    if (holdMessage == "!twitter")
-		client.action("ranner198", "https://twitter.com/Ran_Crump");
+    	var Head = "";
 
-    if (holdMessage == "!instagram")
-		client.action("ranner198", "https://www.instagram.com/ran_crump");
+    	var Tail = "";
 
-    //Jokes
+    	for (let i = 0; i < json.Commands.length; i++) {
+    		if (Object.keys(json.Commands[i]) == holdMessage)
+    		{		
+    			var charArray = obj.Commands[i][holdMessage];
+    			
+    			//If ~ exist
+    			if (charArray.indexOf('~') != -1) {
+    				let indexes = [];
+
+    				for (let i = 0; i < charArray.length; i++) {
+    					if (charArray[i] == '~')
+    						indexes.push(i);
+    				}
+
+    				for (let i = 0; i < indexes.length; i++) {
+	    				if(charArray[indexes[i]+1] == 'n') {
+	    					Head = '@' + userstate['display-name'];
+	    				}
+	    				if(charArray[indexes[i]+1] == 't') {
+	    					Tail = currentTime + '.';   
+	    				}
+    				}  		
+    			}
+
+    			if (Head != "" || Tail != "") {
+	    			let temp = charArray.split('');
+	    			for (let i = 0; i < temp.length; i++) {
+	    				if (temp[i] == '~') {
+	    					temp.splice(i, 2);
+	    					if (i + 3 != null) {
+	    						i = i+3;
+	    					}
+	    				}
+	    			}
+
+	    			Action = temp.join('');
+    			}
+    			else 
+					Action = charArray;
+    		}
+    	}
+
+		if (holdMessage == "!quote" || holdMessage == "!quotes")
+		{
+			var rand = obj.Commands[4].quote[Math.floor(Math.random() * obj.Commands[4].quote.length)];
+			client.action("ranner198", rand);
+		}
+
+    	if (Action != "null")
+			client.action("ranner198", Head + Action + Tail);
+    }
+
+
+
+
+
+
+
+    //Jokes ----------------------------------------------------------------------------------------------------------------------------------------------------------------
     if (holdMessage == "!rip")
     {
-    	client.action("ranner198", "Puts a Flower on " + userstate['display-name'] + "'s Grave." );
-    	var audio = new Audio('audio_file.mp3');
-		audio.play();
+    	client.action("ranner198", "Puts a Flower on @" + userstate['display-name'] + "'s Grave." );
+    	opn('https://www.youtube.com/watch?v=f49ELvryhao');
     }
-	 
-	if (holdMessage == "!small")
-    	client.action("ranner198", '@' + userstate['display-name'] + " is small!" );
 
-	if (holdMessage == "!uptime")
-    	client.action("ranner198", "@" + userstate['display-name'] + " the stream as been running for: " + currentTime + '.');
-
-    if (holdMessage == "!epic")
-    	client.action("ranner198", userstate['display-name'] + " Ranner's account is Ranner198.");
-
-    if (holdMessage == "!pcinfo")
-    	client.action("ranner198", "Ranner has a 2016 ASUSTek, CPU: Intel i7-6700, GPU: NVIDA GeForce GTX 970, RAM: 16GB, Memory: 2TB, Network Speed: 130/15.");
-
-    if (holdMessage == "!fortnite")
-    	client.action("ranner198", "Total Kills: 525, Win: 3%, K/D: 1.20, KPM: 0.4, Level: 51.");
-
-    if (holdMessage == "!overlay")
-    	client.action("ranner198", " My Overlay is from: https://wdflat.com/product/fortnite-overlay/ they have some really great overlays go check them out!");
+	//(Include) Jokes -------------------------------------------------------------------------------------------------------------
 
     if (holdMessage.includes("rannerbot"))
     	client.action("ranner198", '@' + userstate['display-name'] + " cmonBruh");
@@ -155,10 +215,6 @@ client.on("chat", function (channel, userstate, message, self) {
     if (holdMessage.includes("shit") || holdMessage.includes("fuck") || holdMessage.includes("cock") || holdMessage.includes("dick") || holdMessage.includes("ass") || holdMessage.includes("mf"))
     	client.action("ranner198", '@' + userstate['display-name'] + " Watch yo' profanity.");
 
-    if (holdMessage == ("!quote")) {
-    	var rand = Quotes[Math.floor(Math.random() * Quotes.length)];
-		client.action("ranner198", rand);
-	}
 	
 	if (holdMessage.includes("songrequest") && holdMessage.includes("youtube.com")) {
 
@@ -173,18 +229,46 @@ client.on("chat", function (channel, userstate, message, self) {
 		opn(stringName);
 		client.action("ranner198", stringName);
 	}
+
+
+
+
+
+    //Clear Chat Function -----------------------------------------------------------------------------------------------------------
+	if (holdMessage == "!clear") {
+		client.clear("ranner198").then(function(data) {
+	    	console.log("chat has been cleared by: " + userstate['display-name']);
+		}).catch(function(err) {
+		    console.log(err);
+		});
+	}
+/*
+	if (holdMessage == "!changecolor") {
+		randomColor();
+		client.action("ranner198", "My current color is: " + colorArray[currentColor]);
+	}
+
+
+    if (holdMessage == "!overlay")
+    	client.action("ranner198", " My Overlay is from: https://wdflat.com/product/fortnite-overlay/ they have some really great overlays go check them out!");
+*/
+
 });
 
 
-//Follow Me Loop
+//Follow Me Loop ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 var tipsAndTricks = ["The RannerBot is now up and running in Alpha Stage, type !help for the list of avaliable commands", "Enjoying the stream? Follow me on Twitter: https://twitter.com/Ran_Crump and Instagram: https://www.instagram.com/ran_crump"]
 
+/*
+
 setInterval(followMe, 1200000);
+
 
 function followMe(channel)
 {
-	var randomNum = tipsAndTricks[Math.floor(Math.random() * tipsAndTricks.length+1)];
+	var randomNum = tipsAndTricks[Math.floor(Math.random() * tipsAndTricks.length)];
 
 	client.action("ranner198", randomNum);
 }
+*/
