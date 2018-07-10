@@ -1,4 +1,10 @@
 {
+	"UserData": [
+		{"UserName": "rannerbot"},
+		{"ChatChannel": "Ranner198"},
+		{"PassWord": "oauth:u0xmwn51xanm4yg6x1wyd8r24i56d2"}
+	],
+
 	"Commands": [{
 			"!help": "Commands: !help, !twitter, !instagram, !rip, !small, !uptime, !epic, !pcinfo, !fortnite, !overlay, !quote, !songrequest, !discord, !epic, !hug"
 		},

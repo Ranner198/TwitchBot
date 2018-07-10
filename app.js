@@ -3,12 +3,17 @@ const tmi = require('tmi.js');
 const opn = require('opn');
 
 //JSON List
-const json = require('./TwitchBotJson');
+const json = require('./TwitchBotJson.json');
 var string = JSON.stringify(json);
 var obj = JSON.parse(string);
 
-//For Fortnite API
-const request = require('ajax-request');
+var userName = obj.UserData[0]["UserName"];
+var chatChannel = obj.UserData[1]["ChatChannel"];
+var passWord = obj.UserData[2]["PassWord"];
+
+console.log(userName);
+console.log(chatChannel);
+console.log(passWord);
 
 var options = {
 	options: {
@@ -19,14 +24,14 @@ var options = {
 		reconnect: true
 	},
 	identity: {
-		username: "rannerbot:",
-		password: "oauth:u0xmwn51xanm4yg6x1wyd8r24i56d2"
+		username: userName,
+		password: passWord
 	},
-	channels: ["ranner198"]
+	channels: [chatChannel]
 };
 
 //Timer ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-var UpSeconds = 50;
+var UpSeconds = 0;
 
 var currentTime = 0;
 
@@ -95,7 +100,7 @@ client.color(colorArray[currentColor]).then(function(data) {
 
 //Hosted
 client.on("hosted", function (channel, user, viewers, autohost) {
-    client.action("ranner198", user + 
+    client.action(chatChannel, user + 
     	" thank you for the host! Current viewers = " + viewers);
 });
 
@@ -107,12 +112,12 @@ client.on("join", function (channel, username, self) {
 	if (self) return;
 
 	numJoined++;
-	if(username != "ranner198") {
-		client.action("ranner198", "Hello " + username + " has joined chat, say hi HeyGuys");
+	if(username != chatChannel) {
+		client.action(chatChannel, "Hello " + username + " has joined chat, say hi HeyGuys");
 	}
     if (numJoined % 3 == 0)
     {
-    	client.action("ranner198", " Hi, I'm RannerBot. I do things, just type !help to see my list of commands.");
+    	client.action(chatChannel, " Hi, I'm RannerBot. I do things, just type !help to see my list of commands.");
     }
 
 });
@@ -139,6 +144,8 @@ client.on("chat", function (channel, userstate, message, self) {
 
     	var Tail = "";
 
+    	var position = -1;
+
     	for (let i = 0; i < json.Commands.length; i++) {
     		if (Object.keys(json.Commands[i]) == holdMessage)
     		{		
@@ -160,10 +167,14 @@ client.on("chat", function (channel, userstate, message, self) {
 	    				if(charArray[indexes[i]+1] == 't') {
 	    					Tail = currentTime + '.';   
 	    				}
-    				}  		
+    				}  	
+    				if (charArray.indexOf('~@') != -1)
+    				{
+    					position = charArray.indexOf('~@');
+    				}	
     			}
 
-    			if (Head != "" || Tail != "") {
+    			if (Head != "" || Tail != "" || position != -1) {
 	    			let temp = charArray.split('');
 	    			for (let i = 0; i < temp.length; i++) {
 	    				if (temp[i] == '~') {
@@ -184,11 +195,17 @@ client.on("chat", function (channel, userstate, message, self) {
 		if (holdMessage == "!quote" || holdMessage == "!quotes")
 		{
 			var rand = obj.Commands[4].quote[Math.floor(Math.random() * obj.Commands[4].quote.length)];
-			client.action("ranner198", rand);
+			client.action(chatChannel, rand);
 		}
 
-    	if (Action != "null")
-			client.action("ranner198", Head + Action + Tail);
+    	if (Action != "null" && position == -1) {
+    		if (position != -1) {
+    			//client.action(chatChannel)
+    		}
+    		else {
+				client.action(chatChannel, Head + Action + Tail);
+    		}
+    	}
     }
 
 
@@ -200,20 +217,20 @@ client.on("chat", function (channel, userstate, message, self) {
     //Jokes ----------------------------------------------------------------------------------------------------------------------------------------------------------------
     if (holdMessage == "!rip")
     {
-    	client.action("ranner198", "Puts a Flower on @" + userstate['display-name'] + "'s Grave." );
+    	client.action(chatChannel, "Puts a Flower on @" + userstate['display-name'] + "'s Grave." );
     	opn('https://www.youtube.com/watch?v=f49ELvryhao');
     }
 
 	//(Include) Jokes -------------------------------------------------------------------------------------------------------------
 
-    if (holdMessage.includes("rannerbot"))
-    	client.action("ranner198", '@' + userstate['display-name'] + " cmonBruh");
+    if (holdMessage.includes(userName))
+    	client.action(chatChannel, '@' + userstate['display-name'] + " cmonBruh");
 
-    if (holdMessage.includes("ranner198"))
-    	client.action("ranner198", '@' + userstate['display-name'] + " New phone, who dis?");
+    if (holdMessage.includes(chatChannel))
+    	client.action(chatChannel, '@' + userstate['display-name'] + " New phone, who dis?");
 
     if (holdMessage.includes("shit") || holdMessage.includes("fuck") || holdMessage.includes("cock") || holdMessage.includes("dick") || holdMessage.includes("ass") || holdMessage.includes("mf"))
-    	client.action("ranner198", '@' + userstate['display-name'] + " Watch yo' profanity.");
+    	client.action(chatChannel, '@' + userstate['display-name'] + " Watch yo' profanity.");
 
 	
 	if (holdMessage.includes("songrequest") && holdMessage.includes("youtube.com")) {
@@ -227,7 +244,7 @@ client.on("chat", function (channel, userstate, message, self) {
 		}		
 		var stringName = songTitle.join('');
 		opn(stringName);
-		client.action("ranner198", stringName);
+		client.action(chatChannel, stringName);
 	}
 
 
@@ -236,7 +253,7 @@ client.on("chat", function (channel, userstate, message, self) {
 
     //Clear Chat Function -----------------------------------------------------------------------------------------------------------
 	if (holdMessage == "!clear") {
-		client.clear("ranner198").then(function(data) {
+		client.clear(chatChannel).then(function(data) {
 	    	console.log("chat has been cleared by: " + userstate['display-name']);
 		}).catch(function(err) {
 		    console.log(err);
@@ -258,7 +275,7 @@ client.on("chat", function (channel, userstate, message, self) {
 
 //Follow Me Loop ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-var tipsAndTricks = ["The RannerBot is now up and running in Alpha Stage, type !help for the list of avaliable commands", "Enjoying the stream? Follow me on Twitter: https://twitter.com/Ran_Crump and Instagram: https://www.instagram.com/ran_crump"]
+var tipsAndTricks = ["The userName is now up and running in Alpha Stage, type !help for the list of avaliable commands", "Enjoying the stream? Follow me on Twitter: https://twitter.com/Ran_Crump and Instagram: https://www.instagram.com/ran_crump"]
 
 /*
 
