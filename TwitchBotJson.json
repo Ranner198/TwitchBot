@@ -6,7 +6,7 @@
 	],
 
 	"Commands": [{
-			"!help": "Commands: !help, !twitter, !instagram, !rip, !small, !uptime, !epic, !pcinfo, !quote, !songrequest, !discord, !epic"
+			"!help": "Commands: !help, !twitter, !instagram, !uptime, !rip, !small, !epic, !quote, !songrequest, !discord, !epic"
 		},
 		{
 			"!twitter": "https://twitter.com/Ran_Crump"
