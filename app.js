@@ -11,9 +11,15 @@ var userName = obj.UserData[0]["UserName"];
 var chatChannel = obj.UserData[1]["ChatChannel"];
 var passWord = obj.UserData[2]["PassWord"];
 
-console.log(userName);
-console.log(chatChannel);
-console.log(passWord);
+var secrectKey = [];
+
+for (var i = 5; i < passWord.length; i++) {
+	secrectKey.push('*');
+}
+
+console.log("User Name: " + userName);
+console.log("Chat Channel: " + chatChannel);
+console.log("oauth: " + secrectKey.join(''));
 
 var options = {
 	options: {
@@ -31,52 +37,44 @@ var options = {
 };
 
 //Timer ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-var UpSeconds = 0;
-
-var currentTime = 0;
-
-//Variables
-var Seconds = 0;
-var Mins = 0;
-var Hours = 0;
-
-setInterval(Timer, 1000); 
-
-function Timer() {
-
-	var tempHold = '';
-
-	UpSeconds = UpSeconds + 1;
-
-	Seconds = UpSeconds;
-
-	if (Seconds < 10 && Seconds.toString().length < 2)
-	{
-		Seconds = '0' + Seconds
-	}
-	if (Mins < 10 && Mins.toString().length < 2)
-	{
-		tempHold = '0';
-	}
-	else
-	{
-		tempHold = '';
-	}
-
-	if (Seconds >= 60)
-	{
-		Mins = Mins + 1;
-		UpSeconds = 0;
-	}
-
-	if (Mins >= 60)
-	{
-		Hours = Hours + 1;
-		Mins = 0;
-	}
-
-	currentTime = Hours + ':' + tempHold + Mins + ':' + Seconds;
+var Time = function() {
+	this.fix = function(num) {
+		this.num = num;
+		if (this.num < 10) {
+			this.num = '0' + this.num;
+			return this.num;
+		} else
+			return this.num;
+	};
 }
+
+var newTime = new Time();
+
+var startTime = new Date();
+
+var startSeconds = startTime.getSeconds();
+var startMinutes = startTime.getMinutes();
+var startHours = startTime.getHours();
+
+function GetTime() {
+
+	let currentTime = new Date();
+
+	let currentSeconds = currentTime.getSeconds();
+	let currentMinutes = currentTime.getMinutes();
+	let currentHours = currentTime.getHours();
+
+	let seconds = Math.abs(startSeconds - currentSeconds);
+	let minutes = Math.abs(startMinutes - currentMinutes); 
+	let hours = (startHours - currentHours);
+
+	seconds = newTime.fix(seconds);
+	minutes = newTime.fix(minutes);
+	hours = newTime.fix(hours);
+
+	return hours + ':' + minutes + ':' + seconds;
+	//console.log(hours + ':' + minutes + ':' + seconds);
+ }
 
 //Logic ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 var client = new tmi.client(options);
@@ -165,7 +163,7 @@ client.on("chat", function (channel, userstate, message, self) {
 	    					Head = '@' + userstate['display-name'];
 	    				}
 	    				if(charArray[indexes[i]+1] == 't') {
-	    					Tail = currentTime + '.';   
+	    					Tail = GetTime() + '.';   
 	    				}
     				}  	
     				if (charArray.indexOf('~@') != -1)
@@ -194,7 +192,7 @@ client.on("chat", function (channel, userstate, message, self) {
 
 		if (holdMessage == "!quote" || holdMessage == "!quotes")
 		{
-			var rand = obj.Commands[4].quote[Math.floor(Math.random() * obj.Commands[4].quote.length)];
+			var rand = obj.Commands[4].quote[Math.floor(Math.random() * obj.Commands[4  ].quote.length)];
 			client.action(chatChannel, rand);
 		}
 
@@ -208,18 +206,37 @@ client.on("chat", function (channel, userstate, message, self) {
     	}
     }
 
-
-
-
-
-
-
     //Jokes ----------------------------------------------------------------------------------------------------------------------------------------------------------------
     if (holdMessage == "!rip")
     {
     	client.action(chatChannel, "Puts a Flower on @" + userstate['display-name'] + "'s Grave." );
     	opn('https://www.youtube.com/watch?v=f49ELvryhao');
     }
+
+    if (holdMessage == "!hug")
+    {
+    	client.action(chatChannel, "Gives @" + userstate['display-name'] + " a hug<3<3<3." );
+    }
+
+    if (holdMessage == "!roulette")
+    {
+    	client.action(chatChannel, "Isn't Gambling like illegal or something???");
+
+    	setTimeout(roulette, 3000);
+    }
+
+    function roulette(channel) 
+	{
+	let winorlouse = Math.floor(Math.random()*2);
+
+	if (winorlouse == 0) {
+		client.action(chatChannel, "Congrats you won!");
+	}
+
+	if (winorlouse == 1) {
+		client.action(chatChannel, "#FAIL! Git Gud ya Weeb!");
+	}	
+	}
 
 	//(Include) Jokes -------------------------------------------------------------------------------------------------------------
 
@@ -277,10 +294,11 @@ client.on("chat", function (channel, userstate, message, self) {
 
 var tipsAndTricks = ["The userName is now up and running in Alpha Stage, type !help for the list of avaliable commands", "Enjoying the stream? Follow me on Twitter: https://twitter.com/Ran_Crump and Instagram: https://www.instagram.com/ran_crump"]
 
+
+
 /*
 
 setInterval(followMe, 1200000);
-
 
 function followMe(channel)
 {

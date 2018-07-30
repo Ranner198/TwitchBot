@@ -1,21 +1,18 @@
 {
 	"UserData": [
-		{"UserName": "rannerbot"},
+		{"UserName": "RannerBot"},
 		{"ChatChannel": "Ranner198"},
 		{"PassWord": "oauth:u0xmwn51xanm4yg6x1wyd8r24i56d2"}
 	],
 
 	"Commands": [{
-			"!help": "Commands: !help, !twitter, !instagram, !uptime, !rip, !small, !epic, !quote, !songrequest, !discord, !epic"
+			"!help": "Commands: !help, !twitter, !instagram, !rip, !small, !uptime, !epic, !pcinfo, !fortnite, !overlay, !quote, !songrequest, !discord, !epic, !hug"
 		},
 		{
 			"!twitter": "https://twitter.com/Ran_Crump"
 		},
 		{
 			"!instagram": "https://www.instagram.com/ran_crump"
-		},
-		{
-			"!uptime": "~n  the Ranner stream has been running for: ~t"
 		}, 
 		{
 			"!pcinfo": "Ranner has a 2016 ASUSTek, CPU: Intel i7-6700, GPU: NVIDA GeForce GTX 970, RAM: 16GB, Memory: 2TB, Network Speed: 130/15."
@@ -40,6 +37,12 @@
 		}, 
 		{
 			"!small": "~n is small!"
+		},
+		{
+			"!uptime": "~n the Ranner stream has been running for: ~t"
+		}, 
+		{
+			"!introduction": "Hello RocketPunchLive Channel I am RannerBot v0.10 developed by Ranner198."
 		}
 	]
 }
