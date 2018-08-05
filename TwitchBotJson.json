@@ -2,7 +2,8 @@
 	"UserData": [
 		{"UserName": "RannerBot"},
 		{"ChatChannel": "Ranner198"},
-		{"PassWord": "oauth:u0xmwn51xanm4yg6x1wyd8r24i56d2"}
+		{"PassWord": "oauth:u0xmwn51xanm4yg6x1wyd8r24i56d2"},
+		{"WelcomeMessage": "has joined chat, say hi HeyGuys"}
 	],
 
 	"Commands": [{
@@ -27,7 +28,9 @@
 		  "\"Shut the fuck up. Shut the fuck up right now.\", Spartan 2017.",
  		  "Ranner: \"Crucible or finish the missions?\". Spartan: \"FINISH THE FUCKING MISSIONS\", 2017.",
  		  "\"Yeah Get Mad!\", Ranner 2017.",
- 		  "\"Oof\", Ranner 2018."
+ 		  "\"Oof\", Ranner 2018.",
+ 		  "\"I just work here.\", Ranner 2018",
+ 		  "\"Who the hell is philip?\", Ranner 2018"
 		]}, 
 		{
 			"!discord": "https://discord.gg/6ST5fEn" 
@@ -43,6 +46,9 @@
 		}, 
 		{
 			"!introduction": "Hello RocketPunchLive Channel I am RannerBot v0.10 developed by Ranner198."
+		},
+		{
+			"!website": "~n Ranner's website is: www.rancrump.com/"
 		}
 	]
 }

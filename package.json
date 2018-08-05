@@ -1,7 +1,7 @@
 {
-  "name": "rannerbot",
-  "version": "1.0.0",
-  "description": "bot",
+  "name": "RannerBot",
+  "version": "0.1.2",
+  "description": "Twitch_Bot",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "file-system": "^2.2.2",
+    "jquery": "^3.3.1",
     "opn": "^5.3.0",
+    "request": "^2.85.0",
+    "simple-get-json": "^3.2.3",
     "tmi.js": "^1.2.1"
   }
 }

@@ -7,20 +7,24 @@ const json = require('./TwitchBotJson.json');
 var string = JSON.stringify(json);
 var obj = JSON.parse(string);
 
-var userName = obj.UserData[0]["UserName"];
-var chatChannel = obj.UserData[1]["ChatChannel"];
-var passWord = obj.UserData[2]["PassWord"];
+const userName = obj.UserData[0]["UserName"];
+const chatChannel = obj.UserData[1]["ChatChannel"];
+const passWord = obj.UserData[2]["PassWord"];
+const welcomeMessage = obj.UserData[3]["WelcomeMessage"];
 
 var secrectKey = [];
 
+//For security 
 for (var i = 5; i < passWord.length; i++) {
 	secrectKey.push('*');
 }
 
+//For debugging purposes
 console.log("User Name: " + userName);
 console.log("Chat Channel: " + chatChannel);
 console.log("oauth: " + secrectKey.join(''));
 
+//Setting the option connections
 var options = {
 	options: {
 		debug: true
@@ -36,7 +40,8 @@ var options = {
 	channels: [chatChannel]
 };
 
-//Timer ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Up Time ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 var Time = function() {
 	this.fix = function(num) {
 		this.num = num;
@@ -50,7 +55,7 @@ var Time = function() {
 
 var newTime = new Time();
 
-var startTime = new Date();
+const startTime = new Date();
 
 var startSeconds = startTime.getSeconds();
 var startMinutes = startTime.getMinutes();
@@ -96,23 +101,29 @@ client.color(colorArray[currentColor]).then(function(data) {
     console.log(err);
 });
 
-//Hosted
+//On Hosted
 client.on("hosted", function (channel, user, viewers, autohost) {
     client.action(chatChannel, user + 
     	" thank you for the host! Current viewers = " + viewers);
 });
 
-//User Joined ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//The Total of Users that have joined this stream ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 var numJoined = 0;
 
 client.on("join", function (channel, username, self) {
 
+	//Return if it is the bot or your own channel -------------------------------
 	if (self) return;
+	if (username != userName) return;
 
+	
+	//Welcome The users to the channel ------------------------------------------
+	client.action(chatChannel, "Hello " + username + welcomeMessage);
+
+	//increment the num of people joined by 1
 	numJoined++;
-	if(username != chatChannel) {
-		client.action(chatChannel, "Hello " + username + " has joined chat, say hi HeyGuys");
-	}
+
+	//If the total num of users is divisible by 3
     if (numJoined % 3 == 0)
     {
     	client.action(chatChannel, " Hi, I'm RannerBot. I do things, just type !help to see my list of commands.");
@@ -120,17 +131,13 @@ client.on("join", function (channel, username, self) {
 
 });
 
-
-
-
-
-
-
 	//Commands JSON------------------------------------------------------------------------------------------------------------------------------------------------------------
 client.on("chat", function (channel, userstate, message, self) {
     
+    //Set incoming text to lowercase
 	var holdMessage = message.toLowerCase();
 
+	//if this bot sent the message void it out
     if (self) return;
 
 	//Command Messages
@@ -182,7 +189,6 @@ client.on("chat", function (channel, userstate, message, self) {
 	    					}
 	    				}
 	    			}
-
 	    			Action = temp.join('');
     			}
     			else 
@@ -210,7 +216,7 @@ client.on("chat", function (channel, userstate, message, self) {
     if (holdMessage == "!rip")
     {
     	client.action(chatChannel, "Puts a Flower on @" + userstate['display-name'] + "'s Grave." );
-    	opn('https://www.youtube.com/watch?v=f49ELvryhao');
+    	//opn('https://www.youtube.com/watch?v=f49ELvryhao');
     }
 
     if (holdMessage == "!hug")
@@ -225,6 +231,7 @@ client.on("chat", function (channel, userstate, message, self) {
     	setTimeout(roulette, 3000);
     }
 
+    //Russian Roulette
     function roulette(channel) 
 	{
 	let winorlouse = Math.floor(Math.random()*2);
